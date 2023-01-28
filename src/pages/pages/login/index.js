@@ -88,13 +88,16 @@ const LoginPage = () => {
 
     if (!values.email) {
       newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      newErrors.email = 'Email is invalid'
+    } else if (
+      !/^([_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5}))|(\d+$)$/.test(values.email) ||
+      values.email.length < 10
+    ) {
+      newErrors.email = 'Email/Phone No is invalid'
     }
 
     if (!values.password) {
       newErrors.password = 'Password is required'
-    } else if (!/^[A-Za-z]\w{7,14}$/.test(values.password)) {
+    } else if (values.password.length < 8) {
       newErrors.password = 'Password must contain 8 characters'
     }
 

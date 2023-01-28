@@ -93,7 +93,7 @@ const LoginPage = () => {
 
     if (!values.newPassword) {
       newErrors.newPassword = 'Password is required'
-    } else if (!/^[A-Za-z]\w{7,14}$/.test(values.newPassword)) {
+    } else if (values.newPassword.length < 8) {
       newErrors.newPassword = 'Password must contain 8 characters'
     }
 
@@ -129,7 +129,7 @@ const LoginPage = () => {
             <FormControl fullWidth sx={{ mb: 4 }}>
               <InputLabel htmlFor='auth-login-password'>New Password</InputLabel>
               <OutlinedInput
-                label='Password'
+                label='New Password'
                 value={values.newPassword}
                 id='auth-login-password'
                 onChange={handleChange('newPassword')}

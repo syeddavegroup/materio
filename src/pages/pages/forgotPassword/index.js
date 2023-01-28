@@ -78,8 +78,11 @@ const LoginPage = () => {
 
     if (!values.email) {
       newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      newErrors.email = 'Email is invalid'
+    } else if (
+      !/^([_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5}))|(\d+$)$/.test(values.email) ||
+      values.email.length < 10
+    ) {
+      newErrors.email = 'Email/Phone No is invalid'
     }
 
     setErrors(newErrors)
