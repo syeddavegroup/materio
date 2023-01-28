@@ -200,7 +200,7 @@ const LoginPage = () => {
               </Typography>
               <Typography variant='body2'>
                 <Link passHref href='/pages/login'>
-                  <LinkStyled>Sign IN </LinkStyled>
+                  <LinkStyled>Log In</LinkStyled>
                 </Link>
               </Typography>
             </Box>
