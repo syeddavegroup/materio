@@ -60,13 +60,11 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
-    userName: '',
-    email: '',
-    password: '',
-    agreeTerms: false,
-    showPassword: false
+    newPassword: '',
+    confirmPassword: '',
+    showPassword: false,
+    showConfirmPassword: false
   })
-  const [acceptTnC, setAcceptTnC] = useState(false)
 
   const [errors, setErrors] = useState({})
 
@@ -78,13 +76,12 @@ const LoginPage = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  function agreeTermsHandler(e) {
-    setAcceptTnC(e.target.checked)
-    console.log(acceptTnC)
-  }
-
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
+  }
+
+  const handleClickShowConfirmPassword = () => {
+    setValues({ ...values, showConfirmPassword: !values.showConfirmPassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -94,20 +91,14 @@ const LoginPage = () => {
   function validateForm() {
     const newErrors = {}
 
-    if (!values.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      newErrors.email = 'Email is invalid'
+    if (!values.newPassword) {
+      newErrors.newPassword = 'Password is required'
+    } else if (!/^[A-Za-z]\w{7,14}$/.test(values.newPassword)) {
+      newErrors.newPassword = 'Password must contain 8 characters'
     }
 
-    if (!values.password) {
-      newErrors.password = 'Password is required'
-    } else if (!/^[A-Za-z]\w{7,14}$/.test(values.password)) {
-      newErrors.password = 'Password must contain 8 characters'
-    }
-
-    if (!acceptTnC) {
-      newErrors.acceptTnc = 'Agree with Terms'
+    if (values.newPassword !== values.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match'
     }
 
     setErrors(newErrors)
@@ -129,40 +120,19 @@ const LoginPage = () => {
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}></Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to D Community
+              Reset Password
             </Typography>
-            <Typography variant='body2'>Create Account to join the community</Typography>
+            <Typography variant='body2'>Change your Existing password with new password</Typography>
           </Box>
+
           <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              id='userName'
-              label='User name'
-              value={values.userName}
-              onChange={handleChange('userName')}
-            />
-            <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
-              {errors.userName}
-            </Typography>
-
-            <TextField
-              fullWidth
-              id='email'
-              label='Email/Phone no'
-              value={values.email}
-              onChange={handleChange('email')}
-            />
-            <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
-              {errors.email}
-            </Typography>
-
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
+            <FormControl fullWidth sx={{ mb: 4 }}>
+              <InputLabel htmlFor='auth-login-password'>New Password</InputLabel>
               <OutlinedInput
                 label='Password'
-                value={values.password}
+                value={values.newPassword}
                 id='auth-login-password'
-                onChange={handleChange('password')}
+                onChange={handleChange('newPassword')}
                 type={values.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
@@ -179,55 +149,49 @@ const LoginPage = () => {
               />
             </FormControl>
             <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
-              {errors.password}
+              {errors.newPassword}
             </Typography>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel
-                control={<Checkbox checked={acceptTnC} onChange={agreeTermsHandler} value={values.agreeTerms} />}
-                label='I Agree with Terms & Condition'
-                onChange={handleChange('rememberMe')}
-                sx={{ marginBottom: 7 }}
+
+            <FormControl fullWidth>
+              <InputLabel htmlFor='auth-login-password'>Confirm Password</InputLabel>
+              <OutlinedInput
+                label='Confirm Password'
+                value={values.confirmPassword}
+                id='auth-login-confirmPassword'
+                onChange={handleChange('confirmPassword')}
+                type={values.showConfirmPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showConfirmPassword ? <EyeOutline /> : <EyeOffOutline />}
+                    </IconButton>
+                  </InputAdornment>
+                }
               />
-            </Box>
+            </FormControl>
+            <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
+              {errors.confirmPassword}
+            </Typography>
+
             <Button type='submit' fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }}>
-              Sign Up
+              Login
             </Button>
+
+            <Divider sx={{ my: 5 }}>or</Divider>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
-                Member of the Community?
+                Log In instead,
               </Typography>
               <Typography variant='body2'>
                 <Link passHref href='/pages/login'>
-                  <LinkStyled>Sign IN </LinkStyled>
+                  <LinkStyled>Click Here</LinkStyled>
                 </Link>
               </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
             </Box>
           </form>
         </CardContent>

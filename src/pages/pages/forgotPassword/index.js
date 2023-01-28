@@ -60,9 +60,7 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
-    email: '',
-    password: '',
-    showPassword: false
+    email: ''
   })
 
   const [errors, setErrors] = useState({})
@@ -75,14 +73,6 @@ const LoginPage = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault()
-  }
-
   function validateForm() {
     const newErrors = {}
 
@@ -90,12 +80,6 @@ const LoginPage = () => {
       newErrors.email = 'Email is required'
     } else if (!/\S+@\S+\.\S+/.test(values.email)) {
       newErrors.email = 'Email is invalid'
-    }
-
-    if (!values.password) {
-      newErrors.password = 'Password is required'
-    } else if (!/^[A-Za-z]\w{7,14}$/.test(values.password)) {
-      newErrors.password = 'Password must contain 8 characters'
     }
 
     setErrors(newErrors)
@@ -133,76 +117,15 @@ const LoginPage = () => {
               {errors.email}
             </Typography>
 
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
-              <OutlinedInput
-                label='Password'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      aria-label='toggle password visibility'
-                    >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-            <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
-              {errors.password}
-            </Typography>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel control={<Checkbox />} label='Remember Me' onChange={handleChange('rememberMe')} />
-              <Link passHref href='/pages/forgotPassword'>
-                <LinkStyled>Forgot Password?</LinkStyled>
-              </Link>
-            </Box>
             <Button type='submit' fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }}>
-              Login
+              Submit
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2' sx={{ marginRight: 2 }}>
-                New to the Community?
-              </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Create Account</LinkStyled>
+                <Link passHref href='/pages/login'>
+                  <LinkStyled sx={{ fontWeight: 'bold' }}>BACK TO LOGIN</LinkStyled>
                 </Link>
               </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
             </Box>
           </form>
         </CardContent>
