@@ -21,9 +21,11 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
+import AuthHelper from 'src/helper/AuthHelper'
 
 const Dashboard = () => {
   return (
+    <AuthHelper>
     <ApexChartWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
@@ -95,6 +97,7 @@ const Dashboard = () => {
         </Grid>
       </Grid>
     </ApexChartWrapper>
+    </AuthHelper>
   )
 }
 

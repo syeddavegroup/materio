@@ -38,6 +38,10 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { MenuItem } from '@mui/material'
+import { useContext } from 'react'
+import { UserContext } from 'src/context/user'
+import AuthHelper from 'src/helper/AuthHelper'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -60,14 +64,15 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
-    fullName: '',
+    type:"Developer",
+    fullname: '',
     email: '',
     password: '',
     agreeTerms: false,
     showPassword: false
   })
   const [acceptTnC, setAcceptTnC] = useState(false)
-
+const {register}=useContext(UserContext)
   const [errors, setErrors] = useState({})
 
   // ** Hook
@@ -94,8 +99,8 @@ const LoginPage = () => {
   function validateForm() {
     const newErrors = {}
 
-    if (!values.fullName) {
-      newErrors.fullName = 'Name is required'
+    if (!values.fullname) {
+      newErrors.fullname = 'Name is required'
     }
 
     if (!values.email) {
@@ -125,11 +130,12 @@ const LoginPage = () => {
   function handleSubmit(e) {
     e.preventDefault()
     if (validateForm()) {
-      console.log(values)
+      register({...values,username:values.email})
     }
   }
 
   return (
+
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
@@ -141,15 +147,29 @@ const LoginPage = () => {
             <Typography variant='body2'>Create Account to join the community</Typography>
           </Box>
           <form onSubmit={handleSubmit}>
+          <TextField
+              fullWidth
+              id='accountType'
+              label='Account Type'
+              value={values.type}
+              style={{marginBottom:10}}
+              select
+              onChange={handleChange('type')}
+            >
+              <MenuItem value='Vendor'>Vendor</MenuItem>
+              <MenuItem value='Developer'>Developer</MenuItem>
+            </TextField>
+
+
             <TextField
               fullWidth
-              id='fullName'
+              id='fullname'
               label='Full Name'
-              value={values.fullName}
-              onChange={handleChange('fullName')}
+              value={values.fullname}
+              onChange={handleChange('fullname')}
             />
             <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
-              {errors.fullName}
+              {errors.fullname}
             </Typography>
 
             <TextField
@@ -241,6 +261,7 @@ const LoginPage = () => {
       </Card>
       <FooterIllustrationsV1 />
     </Box>
+
   )
 }
 LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>

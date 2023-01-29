@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -38,6 +38,8 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { UserContext } from 'src/context/user'
+import AuthHelper from 'src/helper/AuthHelper'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -82,6 +84,7 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+  const {login,user}=useContext(UserContext)
 
   function validateForm() {
     const newErrors = {}
@@ -109,11 +112,15 @@ const LoginPage = () => {
   function handleSubmit(e) {
     e.preventDefault()
     if (validateForm()) {
+      login({identifier:values.email,password:values.password})
       console.log(values)
     }
   }
 
-  return (
+console.log("dasdasdasd",user)
+
+return (
+  <AuthHelper>
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
@@ -212,6 +219,7 @@ const LoginPage = () => {
       </Card>
       <FooterIllustrationsV1 />
     </Box>
+    </AuthHelper>
   )
 }
 LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>

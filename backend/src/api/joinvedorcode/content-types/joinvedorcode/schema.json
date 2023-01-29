@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "joinvedorcodes",
+  "info": {
+    "singularName": "joinvedorcode",
+    "pluralName": "joinvedorcodes",
+    "displayName": "joinvedorcode"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "uniquecode": {
+      "type": "string"
+    },
+    "vendor": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vendor.vendor"
+    },
+    "expiration": {
+      "type": "datetime"
+    },
+    "isUsed": {
+      "type": "boolean"
+    },
+    "developerEmail": {
+      "type": "email"
+    }
+  }
+}
