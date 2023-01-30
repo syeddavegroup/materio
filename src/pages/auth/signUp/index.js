@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -38,8 +38,9 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { MenuItem } from '@mui/material'
+import { useContext } from 'react'
 import { UserContext } from 'src/context/user'
-import AuthHelper from 'src/helper/AuthHelper'
 
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -62,11 +63,15 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const LoginPage = () => {
   // ** State
   const [values, setValues] = useState({
+    type: 'Developer',
+    fullname: '',
     email: '',
     password: '',
+    agreeTerms: false,
     showPassword: false
   })
-
+  const [acceptTnC, setAcceptTnC] = useState(false)
+  const { register } = useContext(UserContext)
   const [errors, setErrors] = useState({})
 
   // ** Hook
@@ -77,6 +82,11 @@ const LoginPage = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
+  function agreeTermsHandler(e) {
+    setAcceptTnC(e.target.checked)
+    console.log(acceptTnC)
+  }
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
   }
@@ -84,10 +94,13 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-  const {login,user}=useContext(UserContext)
 
   function validateForm() {
     const newErrors = {}
+
+    if (!values.fullname) {
+      newErrors.fullname = 'Name is required'
+    }
 
     if (!values.email) {
       newErrors.email = 'Email is required'
@@ -104,6 +117,10 @@ const LoginPage = () => {
       newErrors.password = 'Password must contain 8 characters'
     }
 
+    if (!acceptTnC) {
+      newErrors.acceptTnc = 'Agree with Terms'
+    }
+
     setErrors(newErrors)
 
     return Object.keys(newErrors).length === 0
@@ -112,15 +129,11 @@ const LoginPage = () => {
   function handleSubmit(e) {
     e.preventDefault()
     if (validateForm()) {
-      login({identifier:values.email,password:values.password})
-      console.log(values)
+      register({ ...values, username: values.email })
     }
   }
 
-console.log("dasdasdasd",user)
-
-return (
-  <AuthHelper>
+  return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
@@ -129,9 +142,33 @@ return (
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
               Welcome to D Community
             </Typography>
-            <Typography variant='body2'>Please sign In here</Typography>
+            <Typography variant='body2'>Create Account to join the community</Typography>
           </Box>
           <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              id='accountType'
+              label='Account Type'
+              value={values.type}
+              style={{ marginBottom: 10 }}
+              select
+              onChange={handleChange('type')}
+            >
+              <MenuItem value='Vendor'>Vendor</MenuItem>
+              <MenuItem value='Developer'>Developer</MenuItem>
+            </TextField>
+
+            <TextField
+              fullWidth
+              id='fullname'
+              label='Full Name'
+              value={values.fullname}
+              onChange={handleChange('fullname')}
+            />
+            <Typography variant='body2' sx={{ marginBottom: 4, color: '#db4437' }}>
+              {errors.fullname}
+            </Typography>
+
             <TextField
               fullWidth
               id='email'
@@ -171,21 +208,23 @@ return (
             <Box
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
-              <FormControlLabel control={<Checkbox />} label='Remember Me' onChange={handleChange('rememberMe')} />
-              <Link passHref href='/pages/forgotPassword'>
-                <LinkStyled>Forgot Password?</LinkStyled>
-              </Link>
+              <FormControlLabel
+                control={<Checkbox checked={acceptTnC} onChange={agreeTermsHandler} value={values.agreeTerms} />}
+                label='I Agree with Terms & Condition'
+                onChange={handleChange('rememberMe')}
+                sx={{ marginBottom: 7 }}
+              />
             </Box>
             <Button type='submit' fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }}>
-              Login
+              Sign Up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
-                New to the Community?
+                Member of the Community?
               </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Create Account</LinkStyled>
+                <Link passHref href='/auth/logIn'>
+                  <LinkStyled>Log In</LinkStyled>
                 </Link>
               </Typography>
             </Box>
@@ -219,7 +258,6 @@ return (
       </Card>
       <FooterIllustrationsV1 />
     </Box>
-    </AuthHelper>
   )
 }
 LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>

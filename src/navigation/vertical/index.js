@@ -18,29 +18,29 @@ const navigation = () => {
       path: '/'
     },
     {
-      title: 'Account Settings',
+      title: 'Profile Settings',
       icon: AccountCogOutline,
-      path: '/account-settings'
+      path: '/profileSettings'
     },
     {
       sectionTitle: 'Pages'
     },
     {
-      title: 'Login',
+      title: 'Log In',
       icon: Login,
-      path: '/pages/login',
+      path: '/auth/logIn',
       openInNewTab: true
     },
     {
-      title: 'Register',
+      title: 'Sign Up',
       icon: AccountPlusOutline,
-      path: '/pages/register',
+      path: '/auth/signUp',
       openInNewTab: true
     },
     {
       title: 'Error',
       icon: AlertCircleOutline,
-      path: '/pages/error',
+      path: '/auth/error',
       openInNewTab: true
     },
     {
